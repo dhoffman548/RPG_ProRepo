@@ -7,6 +7,9 @@ using TMPro;
 public class GameUI : MonoBehaviour
 {
     public TextMeshProUGUI goldText;
+    public TextMeshProUGUI skillText;
+    public Button BlueButton;
+    public Button RedButton;
 
     // instance
     public static GameUI instance;
@@ -19,5 +22,29 @@ public class GameUI : MonoBehaviour
     public void UpdateGoldText (int gold)
     {
         goldText.text = "<b>Gold:</b> " + gold;
+    }
+
+    public void SkillMenu ()
+    {
+        skillText.enabled = true;
+        BlueButton.enabled = true;
+        RedButton.enabled = true;
+    }
+    void OnRedButton ()
+    {
+
+        Invoke("CloseSkillMenu", 0.1f);
+    }
+
+    void OnBlueButton ()
+    {
+        Invoke("CloseSkillMenu", 0.1f);
+    }
+
+    void CloseSkillMenu ()
+    {
+        skillText.enabled = false;
+        BlueButton.enabled = false;
+        RedButton.enabled = false;
     }
 }

@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviourPun
     public int curHp;
     public int maxHp;
     public bool dead;
+    public int level;
+    public bool ghostpick;
 
     [Header("Attack")]
     public int damage;
@@ -28,6 +30,7 @@ public class PlayerController : MonoBehaviourPun
     public SpriteRenderer sr;
     public Animator weaponAnim;
     public HeaderInfo headerInfo;
+    public GameObject Shield;
 
     // local player 
     public static PlayerController me;
@@ -42,6 +45,8 @@ public class PlayerController : MonoBehaviourPun
 
         // initialize the health bar 
         headerInfo.Initialze(player.NickName, maxHp);
+        level = 1;
+        ghostpick = false;
 
         if (player.IsLocal)
             me = this;
@@ -132,9 +137,10 @@ public class PlayerController : MonoBehaviourPun
     void Die ()
     {
         dead = true;
+        moveSpeed = 6;
         rig.isKinematic = true;
 
-        transform.position = new Vector3(0, 99, 0);
+        transform.position = new Vector3(-38, -25, 0);
 
         Vector3 spawnPos = GameManager.instance.spawnPoints[Random.Range(0, GameManager.instance.spawnPoints.Length)].position;
         StartCoroutine(Spawn(spawnPos, GameManager.instance.respawnTime));  
@@ -145,6 +151,10 @@ public class PlayerController : MonoBehaviourPun
         yield return new WaitForSeconds(timeToSpawn);
 
         dead = false;
+        if (ghostpick == false)
+            moveSpeed = 3;
+        else if (ghostpick == true)
+            moveSpeed = 6;
         transform.position = spawnPos;
         curHp = maxHp;
         rig.isKinematic = false;
@@ -166,8 +176,46 @@ public class PlayerController : MonoBehaviourPun
     void GiveGold (int goldToGive)
     {
         gold += goldToGive;
+        if (gold >= 50 && level == 1)
+        {
+            level = 2;
+            maxHp += 10;
+            damage += 2;
+            curHp = maxHp;
+            headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
+            //Invoke("DisplayLevelText", 3.0f);
+            headerInfo.DisplayLevelText();
+            
+        }
+        else if (gold >= 150 && level == 2)
+        {
+            level = 3;
+            maxHp += 10;
+            damage += 2;
+            curHp = maxHp;
+            headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
+            headerInfo.DisplayLevelText();
+        }
+        else if (gold >= 300 && level == 3)
+        {
+            level = 4;
+            maxHp += 10;
+            damage += 2;
+            curHp = maxHp;
+            headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
+            headerInfo.DisplayLevelText();
+            // GameUI.instance.SkillMenu();
+        }
 
         // update the ui
         GameUI.instance.UpdateGoldText(gold);
+
+    }
+
+    [PunRPC]
+    void GhostPickup (Pickup The)
+    {
+        ghostpick = true;
+        The.gameObject.SetActive(false);
     }
 }

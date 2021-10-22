@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     void Update ()
     {
         // does the player exist?
-        if(PlayerController.me != null && !PlayerController.me.dead)
+        if(PlayerController.me != null)
         {
             Vector3 targetPos = PlayerController.me.transform.position;
             targetPos.z = -10;

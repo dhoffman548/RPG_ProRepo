@@ -139,12 +139,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Enemy
   moveSpeed: 3
-  curHp: 20
-  maxHp: 20
+  curHp: 40
+  maxHp: 40
   chaseRange: 5
   attackRange: 1.5
   playerDetectRate: 0.2
-  objectToSpawnOnDeath: GoldPickup
+  objectToSpawnOnDeath: CopperPickup
   damage: 5
   attackRate: 0.5
   healthBar: {fileID: 5411746598243018620}
