@@ -180,7 +180,7 @@ public class Menu : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
             // set the room name and player count text
             button.transform.Find("RoomNameText").GetComponent<TextMeshProUGUI>().text = roomList[x].Name;
-            button.transform.Find("PlayerCountText").GetComponent<TextMeshProUGUI>().text = roomList[x].PlayerCount + " / "; // + roomList[x].MaxPlayers;
+            button.transform.Find("PlayerCountText").GetComponent<TextMeshProUGUI>().text = roomList[x].PlayerCount + " / " + roomList[x].MaxPlayers;
 
             // set the button Onclick event
             Button buttonComp = button.GetComponent<Button>();
